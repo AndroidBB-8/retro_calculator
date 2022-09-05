@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retro_calculator/widgets/button_maker.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,8 +15,58 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var input_eqn = [];
-  var nums_and_ops = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "+", "-", "/", "x"];
+  var answer = "";
+  var nums_and_ops = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "0",
+    "+",
+    "-",
+    "/",
+    "x"
+  ].toList();
+  late int firstNum, secondNum;
+  String history = "", textToDisplay = "", res = "", operation = "";
+  void btnOnClick(String btnVal) {
+    setState(() {});
+    print(btnVal);
+    if (btnVal == "C") {
+      textToDisplay = "";
+    } else if (btnVal == "AC") {
+      textToDisplay = "";
+      history = "";
+    }
+    for (var ele in nums_and_ops) {
+      if (btnVal == ele) {
+        textToDisplay = "$textToDisplay$btnVal";
+        history = "$history$btnVal";
+      } else {
+        continue;
+      }
+    }
+    evaluate() {
+      String finaluserinput = textToDisplay.replaceAll("x", "*");
+      Parser p = Parser();
+      Expression exp = p.parse(finaluserinput);
+      ContextModel cm = ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
+      answer = eval.toString();
+      textToDisplay = answer;
+      history = "$answer\nis";
+    }
+
+    if (btnVal == "=") {
+      evaluate();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +82,7 @@ class _MyAppState extends State<MyApp> {
               child: Padding(
                 padding: EdgeInsets.only(right: 20),
                 child: Text(
-                  "hk",
+                  history,
                   style:
                       GoogleFonts.bebasNeue(fontSize: 50, color: Colors.grey),
                 ),
@@ -43,7 +94,7 @@ class _MyAppState extends State<MyApp> {
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Text(
-                  "987",
+                  textToDisplay,
                   style:
                       GoogleFonts.bebasNeue(fontSize: 100, color: Colors.white),
                 ),
@@ -67,46 +118,46 @@ class _MyAppState extends State<MyApp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ButtonMaker(text: "AC"),
-                ButtonMaker(text: "C"),
-                ButtonMaker(text: "("),
-                ButtonMaker(text: ")"),
+                ButtonMaker(text: "AC", callback: btnOnClick),
+                ButtonMaker(text: "C", callback: btnOnClick),
+                ButtonMaker(text: "(", callback: btnOnClick),
+                ButtonMaker(text: ")", callback: btnOnClick),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ButtonMaker(text: "7"),
-                ButtonMaker(text: "8"),
-                ButtonMaker(text: "9"),
-                ButtonMaker(text: "/"),
+                ButtonMaker(text: "7", callback: btnOnClick),
+                ButtonMaker(text: "8", callback: btnOnClick),
+                ButtonMaker(text: "9", callback: btnOnClick),
+                ButtonMaker(text: "/", callback: btnOnClick),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ButtonMaker(text: "4"),
-                ButtonMaker(text: "5"),
-                ButtonMaker(text: "6"),
-                ButtonMaker(text: "x"),
+                ButtonMaker(text: "4", callback: btnOnClick),
+                ButtonMaker(text: "5", callback: btnOnClick),
+                ButtonMaker(text: "6", callback: btnOnClick),
+                ButtonMaker(text: "x", callback: btnOnClick),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ButtonMaker(text: "1"),
-                ButtonMaker(text: "2"),
-                ButtonMaker(text: "3"),
-                ButtonMaker(text: "-"),
+                ButtonMaker(text: "1", callback: btnOnClick),
+                ButtonMaker(text: "2", callback: btnOnClick),
+                ButtonMaker(text: "3", callback: btnOnClick),
+                ButtonMaker(text: "-", callback: btnOnClick),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ButtonMaker(text: "."),
-                ButtonMaker(text: "0"),
-                ButtonMaker(text: "="),
-                ButtonMaker(text: "+"),
+                ButtonMaker(text: ".", callback: btnOnClick),
+                ButtonMaker(text: "0", callback: btnOnClick),
+                ButtonMaker(text: "=", callback: btnOnClick),
+                ButtonMaker(text: "+", callback: btnOnClick),
               ],
             )
           ],
