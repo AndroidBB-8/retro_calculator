@@ -7,7 +7,8 @@ import 'package:retro_calculator/main.dart';
 
 class ButtonMaker extends StatelessWidget {
   final String text;
-  ButtonMaker({super.key, required this.text});
+  final Function callback;
+  const ButtonMaker({super.key, required this.text, required this.callback});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +20,7 @@ class ButtonMaker extends StatelessWidget {
           style: TextButton.styleFrom(
               splashFactory: InkRipple.splashFactory,
               primary: Color.fromRGBO(95, 113, 97, 1.0)),
-          onPressed: calc_input(text),
+          onPressed: () => callback(text),
           child: Text(
             text,
             style: GoogleFonts.dosis(
